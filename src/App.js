@@ -3,6 +3,8 @@ import React, {useEffect, useState} from 'react';
 import Todo from './Todo'
 import {Button, FormControl, InputLabel, FormHelperText, Input} from '@mui/material';
 import db from './firebase';
+import { collection } from 'firebase/firestore/lite';
+import { addDoc, onSnapshot } from "firebase/firestore";
 
 function App() {
   //todos is an array or list to store items for sort time
@@ -13,7 +15,8 @@ function App() {
   //when the app loads, we need to listen to db and fetch added/removed todos from the database
   useEffect(()=>{
     //it will fireup once app.js will load
-    db.collection('todos').onSnapshot(snapshot =>{
+    onSnapshot(collection(db,'todos'),snapshot => {
+      console.log(snapshot.docs.map(doc => doc.data().todo))
       setTodos(snapshot.docs.map(doc => doc.data().todo));
     })
   }, []) //it will fireup the number of time [] invokes
@@ -21,7 +24,11 @@ function App() {
   const addTodo = (event)=>{
     //this will fire off once add items button will clicked
     event.preventDefault(); //to stop the refresh
-    console.log('I am working!!!');
+
+    addDoc(collection(db, "todos"), {
+      todo: input
+    });
+
     setTodos([...todos, input]); //spread operator will push all todos in input
     setInput('');  //set input list again to empty
   }
@@ -36,7 +43,7 @@ function App() {
         <FormControl>
           <InputLabel >Add your items here</InputLabel>
           <Input value={input} onChange = {event=> setInput(event.target.value)}/>
-          <FormHelperText >We'll never share your email.</FormHelperText>
+          <FormHelperText ></FormHelperText>
         </FormControl>
 
         {/* <input value={input} onChange = {event=> setInput(event.target.value)}/>  */}

@@ -1,8 +1,8 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  import {initializeApp} from 'firebase/app';
+  import { getFirestore} from 'firebase/firestore/lite';
 
-  import firebase from "firebase"
-
-  const firebaseApp = firebase.initializeApp({
+  const firebaseApp = initializeApp({
     apiKey: "AIzaSyAz3IdA_s2v7B_e1rFryAjrMjLvz5o6ZDk",
     authDomain: "todo-app-860ee.firebaseapp.com",
     projectId: "todo-app-860ee",
@@ -12,6 +12,7 @@
     measurementId: "G-J7NTS77R8B"
   });
 
-  const db = firebaseApp.firestore();
+  //const db = firebaseApp.firestore();
+  const db = getFirestore(firebaseApp);
 
   export default db;
